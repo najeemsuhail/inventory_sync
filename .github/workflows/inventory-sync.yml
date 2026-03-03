@@ -1,0 +1,33 @@
+name: Inventory Sync
+
+on:
+  schedule:
+    - cron: '0 3 * * *'   # Runs daily at 3 AM UTC
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          playwright install
+
+      - name: Run normalization
+        run: python 1_generate_normalized_json.py
+
+      - name: Run sync
+        run: python 2_generate_full_sync_sql.py
+        env:
+          WUKUSY_EMAIL: ${{ secrets.WUKUSY_EMAIL }}
+          WUKUSY_PASSWORD: ${{ secrets.WUKUSY_PASSWORD }}
