@@ -2,7 +2,7 @@ name: Inventory Sync
 
 on:
   schedule:
-    - cron: '0 3 * * *'   # Runs daily at 3 AM UTC
+    - cron: '30 21 * * *'   # 3:00 AM IST
   workflow_dispatch:
 
 jobs:
@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
@@ -21,7 +21,8 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          playwright install
+          pip install playwright
+          python -m playwright install --with-deps
 
       - name: Run normalization
         run: python 1_generate_normalized_json.py
