@@ -11,8 +11,8 @@ INPUT_DIR = "normalized_output"
 OUTPUT_SQL_FILE = "inventory_full_sync.sql"
 CONCURRENT_REQUESTS = 10
 
-WUKUSY_EMAIL = "suhail.najeem@gmail.com" # os.getenv("WUKUSY_EMAIL")
-WUKUSY_PASSWORD = "Wukusy@3083" # os.getenv("WUKUSY_PASSWORD")
+WUKUSY_EMAIL =  os.getenv("WUKUSY_EMAIL")
+WUKUSY_PASSWORD = os.getenv("WUKUSY_PASSWORD")
 
 
 # -----------------------------
