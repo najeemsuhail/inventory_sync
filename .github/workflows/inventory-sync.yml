@@ -2,7 +2,8 @@ name: Inventory Sync
 
 on:
   schedule:
-    - cron: '30 21 * * *'   # 3:00 AM IST
+    # 3:00 AM IST = 21:30 UTC
+    - cron: '30 21 * * *'
   workflow_dispatch:
 
 jobs:
@@ -10,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Python
@@ -20,15 +21,16 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install playwright
           python -m playwright install --with-deps
 
-      - name: Run normalization
-        run: python 1_generate_normalized_json.py
+      - name: Run normalization script
+        run: python generate_product_json.py
 
-      - name: Run sync
-        run: python 2_generate_full_sync_sql.py
+      - name: Run sync script
+        run: python generate_sync_sql.py
         env:
           WUKUSY_EMAIL: ${{ secrets.WUKUSY_EMAIL }}
           WUKUSY_PASSWORD: ${{ secrets.WUKUSY_PASSWORD }}
